@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Arnav Sharma | Portfolio</title>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Manrope:wght@700;800&display=swap"
+        rel="stylesheet" />
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e4e1ed",
+                        "on-surface": "#1b1b23",
+                        "secondary-fixed": "#e2dfff",
+                        "surface-bright": "#fcf8ff",
+                        "on-primary-fixed-variant": "#2f2ebe",
+                        "tertiary": "#904900",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f5f2fe",
+                        "on-surface-variant": "#464554",
+                        "primary-fixed": "#e1e0ff",
+                        "surface-container-high": "#e9e6f3",
+                        "on-secondary-fixed": "#0f0069",
+                        "outline": "#767586",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-container": "#efecf8",
+                        "background": "#fcf8ff",
+                        "primary": "#4648d4",
+                        "on-primary": "#ffffff",
+                        "outline-variant": "#c7c4d7",
+                        "error-container": "#ffdad6",
+                        "inverse-surface": "#303038",
+                        "primary-fixed-dim": "#c0c1ff",
+                        "on-tertiary": "#ffffff",
+                        "surface-tint": "#494bd6",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#301400",
+                        "primary-container": "#6063ee",
+                        "on-secondary-container": "#fffbff",
+                        "on-background": "#1b1b23",
+                        "surface-variant": "#e4e1ed",
+                        "surface-dim": "#dbd8e4",
+                        "secondary-container": "#645efb",
+                        "tertiary-container": "#b55d00",
+                        "secondary": "#4b41e1",
+                        "tertiary-fixed": "#ffdcc5",
+                        "inverse-primary": "#c0c1ff",
+                        "on-primary-container": "#fffbff",
+                        "inverse-on-surface": "#f2effb",
+                        "on-error": "#ffffff",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed": "#07006c",
+                        "on-secondary-fixed-variant": "#3323cc",
+                        "surface": "#fcf8ff",
+                        "tertiary-fixed-dim": "#ffb783",
+                        "on-tertiary-fixed-variant": "#703700"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "32px",
+                        "section-padding": "120px",
+                        "container-max": "1280px",
+                        "margin-mobile": "20px",
+                        "unit": "8px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "label-caps": ["Inter"],
+                        "h1": ["Manrope"],
+                        "h3": ["Manrope"],
+                        "h2": ["Manrope"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "h1": ["48px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "h3": ["24px", { "lineHeight": "1.4", "fontWeight": "700" }],
+                        "h2": ["32px", { "lineHeight": "1.3", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(229, 231, 235, 0.5);
+        }
+
+        /* Keep cursor typing animation */
+        .cursor {
+            display: inline-block;
+            width: 2px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-background text-on-background font-body-md">
+    <!-- TopNavBar -->
+    <nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 shadow-sm shadow-indigo-500/5 transition-all"
+        id="navbar">
+        <div class="max-w-[1280px] mx-auto flex justify-between items-center px-8 py-4">
+            <div class="text-xl font-bold tracking-tighter text-gray-900 dark:text-white">Arnav Sharma</div>
+            <div class="hidden md:flex gap-8 items-center" id="nav-menu">
+                <a class="nav-link text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-manrope text-sm font-semibold tracking-tight"
+                    href="#home">Home</a>
+                <a class="nav-link text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-manrope text-sm font-semibold tracking-tight"
+                    href="#about">About</a>
+                <a class="nav-link text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-manrope text-sm font-semibold tracking-tight"
+                    href="#skills">Skills</a>
+                <a class="nav-link text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-manrope text-sm font-semibold tracking-tight"
+                    href="#work">Work</a>
+                <a class="nav-link text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-manrope text-sm font-semibold tracking-tight"
+                    href="#experience">Experience</a>
+                <a class="nav-link text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors font-manrope text-sm font-semibold tracking-tight"
+                    href="#contact">Contact</a>
+            </div>
+            <div class="md:hidden" id="nav-toggle">
+                <span class="material-symbols-outlined cursor-pointer">menu</span>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-32">
+        <!-- Hero Section -->
+        <section class="max-w-[1280px] mx-auto px-8 mb-32 section" id="home">
+            <div class="flex flex-col md:flex-row items-center gap-16">
+                <div class="w-full md:w-3/5 space-y-6">
+                    <span class="text-xs font-semibold tracking-[0.18em] text-primary uppercase mb-2 block">Computer
+                        Science · Class of 2027</span>
+                    <h1 class="font-h1 text-h1 text-on-surface">Arnav Sharma</h1>
+                    <div class="flex items-center text-xl font-semibold text-primary gap-1 my-1">
+                        <span class="typed-text"></span><span class="cursor"></span>
+                    </div>
+                    <p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl leading-relaxed">
+                        I build thoughtful software — from clean web apps to ML-powered tools. Currently studying
+                        Computer Science at VIT Bhopal, and always chasing interesting problems worth solving.
+                    </p>
+                    <div class="flex gap-4 pt-4 hero-buttons">
+                        <a href="#work"
+                            class="bg-primary text-on-primary px-8 py-3 rounded-xl font-semibold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform inline-block">View
+                            Work</a>
+                        <a href="#contact"
+                            class="bg-surface-container-low text-primary px-8 py-3 rounded-xl font-semibold border border-outline-variant hover:bg-surface-container-high transition-colors inline-block">Get
+                            in Touch</a>
+                    </div>
+                </div>
+                <div class="w-full md:w-2/5 relative">
+                    <div
+                        class="absolute -top-4 -left-4 w-full h-full bg-primary/10 rounded-3xl -z-10 transform -rotate-3">
+                    </div>
+                    <img alt="Portrait of Arnav Sharma" class="w-full aspect-[4/5] object-cover rounded-3xl shadow-xl"
+                        data-alt="Professional portrait of a young man with a confident expression, soft studio lighting, minimalist neutral background"
+                        src="WhatsApp%20Image%202026-04-26%20at%2009.48.04.jpeg" />
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section (Highlights) -->
+        <section class="bg-surface-container-low py-32 overflow-hidden section" id="about">
+            <div class="max-w-[1280px] mx-auto px-8">
+                <div class="mb-16">
+                    <h2 class="font-h2 text-h2 mb-4">About Me</h2>
+                    <div class="h-1 w-20 bg-primary"></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div
+                        class="glass-card p-8 rounded-3xl flex items-center gap-6 hover:border-primary/50 transition-colors">
+                        <span class="material-symbols-outlined text-primary text-4xl">school</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Education</h4>
+                            <p class="text-on-surface-variant">Bachelor's in Computer Science</p>
+                        </div>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex items-center gap-6 hover:border-primary/50 transition-colors">
+                        <span class="material-symbols-outlined text-primary text-4xl">location_on</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Location</h4>
+                            <p class="text-on-surface-variant">Vellore Institute of Technology, Bhopal</p>
+                        </div>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex items-center gap-6 hover:border-primary/50 transition-colors">
+                        <span class="material-symbols-outlined text-primary text-4xl">code</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Focus</h4>
+                            <p class="text-on-surface-variant">Full-Stack Development & AI</p>
+                        </div>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex items-center gap-6 hover:border-primary/50 transition-colors">
+                        <span class="material-symbols-outlined text-primary text-4xl">terminal</span>
+                        <div>
+                            <h4 class="font-bold text-lg">Problem Solving</h4>
+                            <p class="text-on-surface-variant">Solved 210+ LeetCode problems</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section: Bento Style -->
+        <section class="py-32 overflow-hidden section" id="skills">
+            <div class="max-w-[1280px] mx-auto px-8">
+                <div class="mb-16">
+                    <h2 class="font-h2 text-h2 mb-4">Core Competencies</h2>
+                    <div class="h-1 w-20 bg-primary"></div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-python text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">Python</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-js-square text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">JavaScript</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-java text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">Java</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-html5 text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">HTML</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-css3-alt text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">CSS</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-react text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">React</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-node-js text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">Node.js</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <i class="fab fa-git-alt text-primary text-4xl"></i>
+                        <p class="font-h3 text-h3 text-lg">Git</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <span class="material-symbols-outlined text-primary text-4xl" data-icon="code">code</span>
+                        <p class="font-h3 text-h3 text-lg">C++</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <span class="material-symbols-outlined text-primary text-4xl"
+                            data-icon="flutter_dash">flutter_dash</span>
+                        <p class="font-h3 text-h3 text-lg">Dart</p>
+                    </div>
+                    <div
+                        class="glass-card p-8 rounded-3xl flex flex-col items-center justify-center gap-4 hover:border-primary/50 transition-colors skill-card">
+                        <span class="material-symbols-outlined text-primary text-4xl"
+                            data-icon="smartphone">smartphone</span>
+                        <p class="font-h3 text-h3 text-lg">Flutter</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section: Asymmetric Layout -->
+        <section class="max-w-[1280px] mx-auto px-8 py-32 section" id="work">
+            <div class="mb-16">
+                <h2 class="font-h2 text-h2 mb-4">Featured Work</h2>
+                <div class="h-1 w-20 bg-primary"></div>
+            </div>
+            <div class="flex flex-col gap-32">
+                <!-- Project 1: Stock Market Predictor -->
+                <div class="flex flex-col md:flex-row gap-12 items-center group project-card">
+                    <div class="w-full md:w-1/2 overflow-hidden rounded-3xl">
+                        <img alt="Stock Market Predictor"
+                            class="w-full h-[400px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                            src="maxim-hopman-fiXLQXAhCfk-unsplash.jpg" />
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-6">
+                        <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-semibold">Machine
+                            Learning</span>
+                        <h3 class="font-h2 text-h2">Stock Market Predictor</h3>
+                        <div class="text-on-surface-variant text-body-lg">
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Built an LSTM-based deep learning model to predict stock prices using historical
+                                    time-series data</li>
+                                <li>Applied data preprocessing, normalization, and sequence modeling techniques</li>
+                                <li>Evaluated model performance using MSE, RMSE, and MAE metrics</li>
+                                <li>Generated future price predictions using recursive multi-step forecasting</li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">Python</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">TensorFlow</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">LSTM</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">yfinance</span>
+                        </div>
+                        <div class="flex gap-4 pt-4">
+                            <a href="https://github.com/arnavvsharmaaa/stock-predictor" target="_blank"
+                                rel="noopener noreferrer"
+                                class="flex items-center gap-2 font-semibold text-primary group/btn">
+                                <i class="fab fa-github"></i> Source Code
+                                <span
+                                    class="material-symbols-outlined group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Club Radar -->
+                <div class="flex flex-col md:flex-row-reverse gap-12 items-center group project-card">
+                    <div class="w-full md:w-1/2 overflow-hidden rounded-3xl">
+                        <img alt="Club Radar"
+                            class="w-full h-[400px] object-cover group-hover:scale-105 transition-transform duration-700"
+                            src="https://pplx-res.cloudinary.com/image/upload/v1754794861/pplx_project_search_images/5e096d5d08d424754420056cc28aa2f971f00fd9.png" />
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-6">
+                        <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-semibold">Web
+                            Development</span>
+                        <h3 class="font-h2 text-h2">Club Radar – Club Management</h3>
+                        <div class="text-on-surface-variant text-body-lg">
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Developed a web platform enabling students to discover and join university clubs
+                                </li>
+                                <li>Contributed to both frontend UI and backend API integration</li>
+                                <li>Implemented event listing and user interaction features for real-time engagement
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">JavaScript</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">HTML</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">CSS</span>
+                            <span class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">REST
+                                APIs</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 3: Portfolio Website -->
+                <div class="flex flex-col md:flex-row gap-12 items-center group project-card">
+                    <div class="w-full md:w-1/2 h-[400px] flex items-center justify-center overflow-hidden rounded-3xl">
+                        <img alt="Portfolio Website"
+                            class="max-w-full max-h-full rounded-3xl shadow-lg group-hover:scale-105 transition-transform duration-700"
+                            src="Screenshot%202026-04-26%20104421.png" />
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-6">
+                        <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-semibold">Full Stack
+                            · JAMstack</span>
+                        <h3 class="font-h2 text-h2">Personal Portfolio Website</h3>
+                        <div class="text-on-surface-variant text-body-lg">
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Built with HTML, Tailwind CSS, and vanilla JavaScript</li>
+                                <li>Fully functional contact system backed by a live PostgreSQL database (Supabase) with
+                                    Row Level Security</li>
+                                <li>Instant email notifications via EmailJS and a private admin dashboard to view,
+                                    search, and manage all incoming messages</li>
+                                <li>JAMstack architecture with zero backend server required</li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">HTML</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">Tailwind CSS</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">JavaScript</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">Supabase</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">PostgreSQL</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">EmailJS</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 4: Resume Builder App -->
+                <div class="flex flex-col md:flex-row-reverse gap-12 items-center group project-card">
+                    <div class="w-full md:w-1/2 overflow-hidden rounded-3xl">
+                        <img alt="Resume Builder App"
+                            class="w-full h-[400px] object-cover object-center group-hover:scale-105 transition-transform duration-700"
+                            src="joao-ferrao-4YzrcDNcRVg-unsplash.jpg" />
+                    </div>
+                    <div class="w-full md:w-1/2 space-y-6">
+                        <span class="bg-primary/10 text-primary px-4 py-1 rounded-full text-sm font-semibold">Mobile
+                            Development</span>
+                        <h3 class="font-h2 text-h2">Resume Builder App</h3>
+                        <div class="text-on-surface-variant text-body-lg">
+                            <ul class="list-disc pl-5 space-y-2">
+                                <li>Building a cross-platform mobile app to dynamically generate professional resumes
+                                </li>
+                                <li>Completed approximately 80% of frontend UI using Flutter and Dart</li>
+                                <li>Planning backend integration for data persistence and template generation</li>
+                            </ul>
+                        </div>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">Flutter</span>
+                            <span
+                                class="bg-surface-container-high text-on-surface px-3 py-1 rounded-full text-sm">Dart</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Future Projects Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 project-card">
+                    <div
+                        class="w-full h-[300px] border-2 border-dashed border-outline-variant rounded-3xl flex flex-col items-center justify-center text-outline-variant hover:border-primary hover:text-primary transition-colors bg-surface-container-low">
+                        <span class="material-symbols-outlined text-6xl mb-4">add_circle</span>
+                        <h3 class="font-h3">Future Project</h3>
+                        <p>Coming Soon...</p>
+                    </div>
+                    <div
+                        class="w-full h-[300px] border-2 border-dashed border-outline-variant rounded-3xl flex flex-col items-center justify-center text-outline-variant hover:border-primary hover:text-primary transition-colors bg-surface-container-low">
+                        <span class="material-symbols-outlined text-6xl mb-4">add_circle</span>
+                        <h3 class="font-h3">Future Project</h3>
+                        <p>Coming Soon...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Timeline -->
+        <section class="bg-on-surface text-surface py-32 section" id="experience">
+            <div class="max-w-[1280px] mx-auto px-8">
+                <div class="mb-20">
+                    <h2 class="font-h2 text-h2 text-white mb-4">Professional Journey</h2>
+                    <div class="h-1 w-20 bg-primary"></div>
+                </div>
+                <div class="space-y-0">
+                    <div
+                        class="flex flex-col md:flex-row border-t border-white/10 py-12 group hover:bg-white/5 transition-colors px-4 timeline-item">
+                        <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                            <p class="text-primary font-bold">2023 — Present</p>
+                        </div>
+                        <div class="w-full md:w-1/3">
+                            <h3 class="text-2xl font-bold">Vellore Institute of Technology, Bhopal</h3>
+                            <p class="text-gray-400">Computer Science Student</p>
+                        </div>
+                        <div class="w-full md:w-1/3 text-gray-400 mt-4 md:mt-0">
+                            Pursuing Bachelor's in Computer Science with focus on software engineering and AI.
+                        </div>
+                    </div>
+                    <div
+                        class="flex flex-col md:flex-row border-t border-b border-white/10 py-12 group hover:bg-white/5 transition-colors px-4 timeline-item">
+                        <div class="w-full md:w-1/3 mb-4 md:mb-0">
+                            <p class="text-primary font-bold">Future</p>
+                        </div>
+                        <div class="w-full md:w-1/3">
+                            <h3 class="text-2xl font-bold">Placeholder</h3>
+                            <p class="text-gray-400">Coming Soon</p>
+                        </div>
+                        <div class="w-full md:w-1/3 text-gray-400 mt-4 md:mt-0">
+                            Open for future additions.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Form Section -->
+        <section class="max-w-[1280px] mx-auto px-8 py-32 section" id="contact">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+                <div>
+                    <h2 class="font-h1 text-h1 mb-6">Let's build something exceptional.</h2>
+                    <p class="text-on-surface-variant text-body-lg mb-12 max-w-md">
+                        Currently accepting new projects and collaboration opportunities. Reach out and let's start a
+                        conversation.
+                    </p>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined" data-icon="mail">mail</span>
+                            </div>
+                            <p class="font-semibold">arnavsharma8079@gmail.com</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined" data-icon="phone">phone</span>
+                            </div>
+                            <p class="font-semibold">+91 9784280041</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                <span class="material-symbols-outlined" data-icon="location_on">location_on</span>
+                            </div>
+                            <p class="font-semibold">Vellore Institute of Technology, Bhopal</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-10 rounded-[2rem] shadow-2xl shadow-indigo-500/10">
+                    <form class="space-y-6" id="contact-form">
+                        <div>
+                            <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">FULL
+                                NAME</label>
+                            <input id="fullName" name="name"
+                                class="w-full px-6 py-4 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                                placeholder="John Doe" type="text" required />
+                        </div>
+                        <div>
+                            <label class="block font-label-caps text-label-caps text-on-surface-variant mb-2">EMAIL
+                                ADDRESS</label>
+                            <input id="emailAddress" name="email"
+                                class="w-full px-6 py-4 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                                placeholder="john@example.com" type="email" required />
+                        </div>
+                        <div>
+                            <label
+                                class="block font-label-caps text-label-caps text-on-surface-variant mb-2">SUBJECT</label>
+                            <input id="subject" name="subject"
+                                class="w-full px-6 py-4 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white"
+                                placeholder="Project Inquiry" type="text" />
+                        </div>
+                        <div>
+                            <label
+                                class="block font-label-caps text-label-caps text-on-surface-variant mb-2">MESSAGE</label>
+                            <textarea id="message" name="message"
+                                class="w-full px-6 py-4 rounded-xl border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all bg-white resize-none"
+                                placeholder="How can I help you?" rows="4" required></textarea>
+                        </div>
+                        <button id="submitBtn" type="button"
+                            class="w-full bg-primary text-on-primary py-5 rounded-xl font-bold text-lg shadow-xl shadow-primary/25 hover:scale-[1.01] active:scale-[0.98] transition-all">Send
+                            Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full py-20 bg-gray-50 dark:bg-gray-950 border-t border-gray-200 dark:border-gray-800">
+        <div class="max-w-[1280px] mx-auto px-8 flex flex-col md:flex-row justify-between items-center gap-8">
+            <div class="font-bold text-gray-900 dark:text-white text-xl">Arnav Sharma</div>
+            <p class="font-manrope text-sm text-gray-500 dark:text-gray-400">&copy; 2026 Arnav Sharma. Built with
+                intentionality.</p>
+            <div class="flex gap-8">
+                <a class="text-gray-500 hover:text-indigo-600 transition-colors font-manrope text-sm hover:underline decoration-indigo-500 underline-offset-4"
+                    href="https://www.linkedin.com/in/arnav-sharma-10a32728a/" target="_blank"
+                    rel="noopener noreferrer">LinkedIn</a>
+                <a class="text-gray-500 hover:text-indigo-600 transition-colors font-manrope text-sm hover:underline decoration-indigo-500 underline-offset-4"
+                    href="https://github.com/arnavvsharmaaa" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a class="text-gray-500 hover:text-indigo-600 transition-colors font-manrope text-sm hover:underline decoration-indigo-500 underline-offset-4"
+                    href="https://leetcode.com/u/ArnavvSharma/" target="_blank" rel="noopener noreferrer">LeetCode</a>
+                <a class="text-gray-500 hover:text-indigo-600 transition-colors font-manrope text-sm hover:underline decoration-indigo-500 underline-offset-4"
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=arnavsharma8079@gmail.com" target="_blank"
+                    rel="noopener noreferrer">Email</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="contact-form.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Arnav Sharma Portfolio</title>
+  <!-- Supabase CDN (only external dependency) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* ── Reset & base ───────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, "Segoe UI", Inter, sans-serif;
+      background: #f0efe9;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    a {
+      color: #4f46e5;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      font-family: inherit;
+    }
+
+    /* ── Login gate ─────────────────────────────────────────────────── */
+    #login-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .login-card {
+      background: #fff;
+      border: 1px solid #e4e4e4;
+      border-radius: 20px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+      text-align: center;
+    }
+
+    .login-card h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .login-card p {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .login-card input {
+      width: 100%;
+      padding: 14px 16px;
+      border: 1.5px solid #d4d4d4;
+      border-radius: 10px;
+      font-size: 15px;
+      outline: none;
+      margin-bottom: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .login-card input:focus {
+      border-color: #4f46e5;
+    }
+
+    .login-card .btn-primary {
+      width: 100%;
+      padding: 14px;
+      background: #111;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .login-card .btn-primary:hover {
+      background: #333;
+    }
+
+    .login-error {
+      color: #dc2626;
+      font-size: 13px;
+      margin-top: 10px;
+      min-height: 18px;
+    }
+
+    /* ── Dashboard shell ────────────────────────────────────────────── */
+    #dashboard {
+      display: none;
+    }
+
+    nav.topbar {
+      background: #111;
+      color: #fff;
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav.topbar .brand {
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    nav.topbar .brand span {
+      color: #a5b4fc;
+    }
+
+    nav.topbar .btn-logout {
+      padding: 8px 18px;
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    nav.topbar .btn-logout:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    /* ── Stat cards ─────────────────────────────────────────────────── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: #fff;
+      border: 1px solid #e4e4e4;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .stat-card .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .stat-card .stat-value {
+      font-size: 36px;
+      font-weight: 800;
+      color: #111;
+      line-height: 1;
+    }
+
+    /* ── Table section header ───────────────────────────────────────── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .section-header h2 {
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .count-badge {
+      background: #4f46e5;
+      color: #fff;
+      border-radius: 20px;
+      padding: 2px 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .spacer {
+      flex: 1;
+    }
+
+    .btn-refresh {
+      padding: 9px 18px;
+      background: #111;
+      color: #fff;
+      border-radius: 9px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-refresh:hover {
+      background: #333;
+    }
+
+    /* ── Search & sort bar ──────────────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-bar input {
+      flex: 1;
+      min-width: 180px;
+      padding: 10px 14px;
+      border: 1.5px solid #d4d4d4;
+      border-radius: 10px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .filter-bar input:focus {
+      border-color: #4f46e5;
+    }
+
+    .filter-bar select {
+      padding: 10px 14px;
+      border: 1.5px solid #d4d4d4;
+      border-radius: 10px;
+      font-size: 14px;
+      font-family: inherit;
+      outline: none;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    /* ── Data table ─────────────────────────────────────────────────── */
+    .table-wrap {
+      background: #fff;
+      border: 1px solid #e4e4e4;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      padding: 14px 18px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #888;
+      background: #fafafa;
+      border-bottom: 1px solid #e4e4e4;
+    }
+
+    td {
+      padding: 14px 18px;
+      font-size: 14px;
+      border-bottom: 1px solid #f0f0f0;
+      vertical-align: top;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr.data-row {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    tr.data-row:hover {
+      background: #fafafa;
+    }
+
+    .truncate-msg {
+      max-width: 240px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .no-data {
+      padding: 48px;
+      text-align: center;
+      color: #aaa;
+      font-size: 15px;
+    }
+
+    /* ── Loading spinner ────────────────────────────────────────────── */
+    .spinner-row td {
+      padding: 48px;
+      text-align: center;
+      color: #aaa;
+    }
+
+    /* ── Modal ──────────────────────────────────────────────────────── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.42);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 36px;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.18);
+    }
+
+    .modal-box h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .modal-field {
+      margin-bottom: 18px;
+    }
+
+    .modal-field .field-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #888;
+      margin-bottom: 4px;
+    }
+
+    .modal-field .field-value {
+      font-size: 15px;
+      color: #111;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .btn-mailto {
+      padding: 10px 20px;
+      background: #4f46e5;
+      color: #fff;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-mailto:hover {
+      background: #4338ca;
+      text-decoration: none;
+    }
+
+    .btn-close-modal {
+      padding: 10px 20px;
+      background: #f0f0f0;
+      color: #333;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-close-modal:hover {
+      background: #e0e0e0;
+    }
+
+    @media (max-width: 640px) {
+      nav.topbar {
+        padding: 0 16px;
+      }
+
+      .container {
+        padding: 24px 16px;
+      }
+
+      .modal-box {
+        padding: 24px;
+      }
+
+      th,
+      td {
+        padding: 12px 12px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Login Screen ──────────────────────────────────────────────────────── -->
+  <div id="login-screen">
+    <div class="login-card">
+      <h1>Admin Access</h1>
+      <p>Portfolio messages dashboard</p>
+      <input id="password-input" type="password" placeholder="Enter admin password" autocomplete="current-password" />
+      <button class="btn-primary" id="login-btn">Sign In</button>
+      <p class="login-error" id="login-error"></p>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ─────────────────────────────────────────────────────────── -->
+  <div id="dashboard">
+    <nav class="topbar">
+      <div class="brand">Arnav Sharma <span>/ Admin</span></div>
+      <button class="btn-logout" id="logout-btn">Logout</button>
+    </nav>
+
+    <div class="container">
+      <!-- Stat cards -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Messages</div>
+          <div class="stat-value" id="stat-total">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">This Month</div>
+          <div class="stat-value" id="stat-month">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">This Week</div>
+          <div class="stat-value" id="stat-week">—</div>
+        </div>
+      </div>
+
+      <!-- Section header -->
+      <div class="section-header">
+        <h2>Messages</h2>
+        <span class="count-badge" id="count-badge">0</span>
+        <span class="spacer"></span>
+        <button class="btn-refresh" id="refresh-btn">↻ Refresh</button>
+      </div>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <input id="search-input" type="text" placeholder="Search by name, email, subject…" />
+        <select id="sort-select">
+          <option value="desc">Newest first</option>
+          <option value="asc">Oldest first</option>
+        </select>
+      </div>
+
+      <!-- Table -->
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Subject</th>
+              <th>Message</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <tr class="spinner-row">
+              <td colspan="5">Loading messages…</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal ──────────────────────────────────────────────────────────────── -->
+  <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-box">
+      <h3>Message Details</h3>
+      <div class="modal-field">
+        <div class="field-label">From</div>
+        <div class="field-value" id="modal-name"></div>
+      </div>
+      <div class="modal-field">
+        <div class="field-label">Email</div>
+        <div class="field-value" id="modal-email"></div>
+      </div>
+      <div class="modal-field">
+        <div class="field-label">Subject</div>
+        <div class="field-value" id="modal-subject"></div>
+      </div>
+      <div class="modal-field">
+        <div class="field-label">Message</div>
+        <div class="field-value" id="modal-message"></div>
+      </div>
+      <div class="modal-field">
+        <div class="field-label">Received</div>
+        <div class="field-value" id="modal-date"></div>
+      </div>
+      <div class="modal-actions">
+        <a id="modal-mailto" class="btn-mailto" href="#">Reply via Email</a>
+        <button class="btn-close-modal" id="modal-close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ════════════════════════════════════════════════════════════════════════════
+    //  CONFIG — fill in your credentials below
+    // ════════════════════════════════════════════════════════════════════════════
+    const ADMIN_PASSWORD = "arnav2026";   // choose a strong password
+    const SUPABASE_URL = "https://dljvbhvvsqbqnhjakcey.supabase.co";     // Supabase → Settings → API → Project URL
+    const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRsanZiaHZ2c3FicW5oamFrY2V5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxODQzOTMsImV4cCI6MjA5Mjc2MDM5M30.DMzDKEWscsQQgGdsWPb5FxrWI4-RmFYgbSulm_L5DdU"; // Supabase → Settings → API → anon public key
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Supabase client
+    // ════════════════════════════════════════════════════════════════════════════
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_ANON);
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  State
+    // ════════════════════════════════════════════════════════════════════════════
+    let allMessages = [];
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Auth helpers
+    // ════════════════════════════════════════════════════════════════════════════
+    function isAuthed() {
+      return sessionStorage.getItem("adminAuth") === "true";
+    }
+
+    function showDashboard() {
+      document.getElementById("login-screen").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+      loadMessages();
+    }
+
+    function showLogin() {
+      document.getElementById("login-screen").style.display = "flex";
+      document.getElementById("dashboard").style.display = "none";
+    }
+
+    // Auto-login if already authenticated this session
+    if (isAuthed()) showDashboard();
+
+    // Login button handler
+    document.getElementById("login-btn").addEventListener("click", () => {
+      const pw = document.getElementById("password-input").value;
+      const errEl = document.getElementById("login-error");
+
+      if (pw === ADMIN_PASSWORD) {
+        sessionStorage.setItem("adminAuth", "true");
+        errEl.textContent = "";
+        showDashboard();
+      } else {
+        errEl.textContent = "Incorrect password. Try again.";
+      }
+    });
+
+    // Allow Enter key on password field
+    document.getElementById("password-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") document.getElementById("login-btn").click();
+    });
+
+    // Logout
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      sessionStorage.removeItem("adminAuth");
+      showLogin();
+    });
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Load messages from Supabase
+    // ════════════════════════════════════════════════════════════════════════════
+    async function loadMessages() {
+      const tbody = document.getElementById("table-body");
+      tbody.innerHTML = '<tr class="spinner-row"><td colspan="5">Loading messages…</td></tr>';
+
+      try {
+        const { data, error } = await db
+          .from("contacts")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) throw error;
+
+        allMessages = data || [];
+        updateStats(allMessages);
+        renderTable(allMessages);
+      } catch (err) {
+        console.error("[admin.html] Failed to load messages:", err);
+        tbody.innerHTML = '<tr class="spinner-row"><td colspan="5" style="color:#dc2626">Failed to load messages. Check your Supabase credentials.</td></tr>';
+      }
+    }
+
+    document.getElementById("refresh-btn").addEventListener("click", loadMessages);
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Stats calculation (client-side)
+    // ════════════════════════════════════════════════════════════════════════════
+    function updateStats(messages) {
+      const now = new Date();
+      const startMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      const startWeek = new Date(now);
+      startWeek.setDate(now.getDate() - now.getDay()); // Sunday
+      startWeek.setHours(0, 0, 0, 0);
+
+      const thisMonth = messages.filter(m => new Date(m.created_at) >= startMonth).length;
+      const thisWeek = messages.filter(m => new Date(m.created_at) >= startWeek).length;
+
+      document.getElementById("stat-total").textContent = messages.length;
+      document.getElementById("stat-month").textContent = thisMonth;
+      document.getElementById("stat-week").textContent = thisWeek;
+    }
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Render table
+    // ════════════════════════════════════════════════════════════════════════════
+    function renderTable(messages) {
+      const tbody = document.getElementById("table-body");
+      const countBadge = document.getElementById("count-badge");
+
+      countBadge.textContent = messages.length;
+
+      if (messages.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="no-data">No messages yet.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = messages.map((m, i) => `
+    <tr class="data-row" data-index="${i}">
+      <td>${escHtml(m.name)}</td>
+      <td>${escHtml(m.email)}</td>
+      <td>${escHtml(m.subject || "(no subject)")}</td>
+      <td><span class="truncate-msg">${escHtml(m.message)}</span></td>
+      <td>${formatDate(m.created_at)}</td>
+    </tr>
+  `).join("");
+
+      // Attach row click → open modal
+      tbody.querySelectorAll(".data-row").forEach(row => {
+        row.addEventListener("click", () => {
+          const msg = messages[parseInt(row.dataset.index)];
+          openModal(msg);
+        });
+      });
+    }
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Search & sort
+    // ════════════════════════════════════════════════════════════════════════════
+    function getFilteredSorted() {
+      const query = document.getElementById("search-input").value.toLowerCase();
+      const sort = document.getElementById("sort-select").value;
+
+      let filtered = allMessages.filter(m =>
+        (m.name || "").toLowerCase().includes(query) ||
+        (m.email || "").toLowerCase().includes(query) ||
+        (m.subject || "").toLowerCase().includes(query) ||
+        (m.message || "").toLowerCase().includes(query)
+      );
+
+      filtered = [...filtered].sort((a, b) => {
+        const da = new Date(a.created_at);
+        const db_ = new Date(b.created_at);
+        return sort === "asc" ? da - db_ : db_ - da;
+      });
+
+      return filtered;
+    }
+
+    document.getElementById("search-input").addEventListener("input", () => renderTable(getFilteredSorted()));
+    document.getElementById("sort-select").addEventListener("change", () => renderTable(getFilteredSorted()));
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Modal
+    // ════════════════════════════════════════════════════════════════════════════
+    function openModal(m) {
+      document.getElementById("modal-name").textContent = m.name;
+      document.getElementById("modal-email").textContent = m.email;
+      document.getElementById("modal-subject").textContent = m.subject || "(no subject)";
+      document.getElementById("modal-message").textContent = m.message;
+      document.getElementById("modal-date").textContent = formatDate(m.created_at, true);
+      document.getElementById("modal-mailto").href =
+        `mailto:${encodeURIComponent(m.email)}?subject=Re:%20${encodeURIComponent(m.subject || "(no subject)")}`;
+
+      document.getElementById("modal-overlay").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("modal-overlay").classList.remove("open");
+    }
+
+    document.getElementById("modal-close").addEventListener("click", closeModal);
+    document.getElementById("modal-overlay").addEventListener("click", (e) => {
+      if (e.target === document.getElementById("modal-overlay")) closeModal();
+    });
+
+    // ════════════════════════════════════════════════════════════════════════════
+    //  Utility functions
+    // ════════════════════════════════════════════════════════════════════════════
+    function escHtml(str) {
+      if (!str) return "";
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function formatDate(iso, long = false) {
+      if (!iso) return "—";
+      const d = new Date(iso);
+      if (long) return d.toLocaleString("en-IN", { dateStyle: "long", timeStyle: "short" });
+      return d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
+    }
+  </script>
+</body>
+
+</html>

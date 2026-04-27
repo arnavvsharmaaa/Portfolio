@@ -1,0 +1,244 @@
+/*
+  Articulate Portfolio — Premium Light Theme
+  Clean, minimal, Apple-inspired styling
+*/
+
+/* ─── Base & Reset ─────────────────────────────────────────────────── */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    overflow-x: hidden;
+    background: radial-gradient(circle at 20% 20%, #f0ebe5, #f7f6f4);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar ────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c7c4d7;
+    border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #9997b0;
+}
+
+/* ─── Navbar ───────────────────────────────────────────────────────── */
+#navbar {
+    background: rgba(10, 10, 10, 0.95) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 1px 24px rgba(0, 0, 0, 0.18);
+}
+
+#navbar .text-xl {
+    color: #ffffff !important;
+}
+
+.nav-link {
+    position: relative;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.nav-link:hover {
+    color: #ffffff !important;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #ffffff;
+    border-radius: 99px;
+    transition: width 0.25s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Mobile menu icon */
+#nav-toggle .material-symbols-outlined {
+    color: #ffffff;
+}
+
+/* ─── Glass Cards ──────────────────────────────────────────────────── */
+.glass-card {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(199, 196, 215, 0.5);
+    box-shadow:
+        0 2px 12px rgba(70, 72, 212, 0.06),
+        0 1px 2px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+}
+
+.glass-card:hover {
+    box-shadow:
+        0 8px 32px rgba(70, 72, 212, 0.12),
+        0 2px 6px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+/* ─── Hero ─────────────────────────────────────────────────────────── */
+#home {
+    padding-top: 2rem;
+}
+
+/* Gradient text on the hero name */
+#home h1 {
+    background: linear-gradient(135deg, #1b1b23 0%, #4648d4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Blinking cursor */
+.cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.1em;
+    background: #4648d4;
+    border-radius: 1px;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Hero CTA buttons */
+.hero-buttons a:first-child {
+    background: linear-gradient(135deg, #4648d4 0%, #6063ee 100%) !important;
+    box-shadow: 0 4px 20px rgba(70, 72, 212, 0.28) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.hero-buttons a:first-child:hover {
+    transform: translateY(-2px) scale(1.02) !important;
+    box-shadow: 0 8px 30px rgba(70, 72, 212, 0.38) !important;
+}
+
+.hero-buttons a:last-child {
+    transition: background 0.2s ease, transform 0.2s ease !important;
+    border: 1.5px solid rgba(70, 72, 212, 0.25) !important;
+}
+
+.hero-buttons a:last-child:hover {
+    transform: translateY(-2px) !important;
+    background: rgba(70, 72, 212, 0.06) !important;
+}
+
+/* ─── Skill Cards ──────────────────────────────────────────────────── */
+.skill-card {
+    cursor: default;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.skill-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 12px 32px rgba(70, 72, 212, 0.14);
+    border-color: rgba(70, 72, 212, 0.3) !important;
+}
+
+.skill-card i,
+.skill-card .material-symbols-outlined {
+    transition: transform 0.2s ease;
+}
+
+.skill-card:hover i,
+.skill-card:hover .material-symbols-outlined {
+    transform: scale(1.18);
+}
+
+/* ─── Project Cards ────────────────────────────────────────────────── */
+.project-card img {
+    transition: transform 0.7s cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+.project-card:hover img {
+    transform: scale(1.04);
+}
+
+/* ─── Experience Timeline ──────────────────────────────────────────── */
+.timeline-item {
+    transition: background 0.2s ease, padding-left 0.25s ease;
+}
+
+.timeline-item:hover {
+    padding-left: 2rem !important;
+}
+
+/* ─── Contact Form ─────────────────────────────────────────────────── */
+#contact-form input,
+#contact-form textarea {
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: rgba(255, 255, 255, 0.9) !important;
+}
+
+#contact-form input:focus,
+#contact-form textarea:focus {
+    border-color: #4648d4 !important;
+    box-shadow: 0 0 0 3px rgba(70, 72, 212, 0.1) !important;
+    outline: none !important;
+}
+
+#contact-form button[type="submit"] {
+    background: linear-gradient(135deg, #4648d4 0%, #6063ee 100%) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+#contact-form button[type="submit"]:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 24px rgba(70, 72, 212, 0.32) !important;
+}
+
+/* ─── Footer ───────────────────────────────────────────────────────── */
+footer {
+    background: rgba(245, 242, 254, 0.7) !important;
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(199, 196, 215, 0.4) !important;
+}
+
+/* ─── Icon alignment ───────────────────────────────────────────────── */
+.fab,
+.fas {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ─── Scroll reveal performance ─────────────────────────────────────── */
+.section,
+.skill-card,
+.project-card,
+.timeline-item {
+    will-change: opacity, transform;
+}
